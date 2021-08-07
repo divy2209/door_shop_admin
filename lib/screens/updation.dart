@@ -23,8 +23,8 @@ class _CropUpdationState extends State<CropUpdation> {
     final crops = Provider.of<List<CropId>>(context);
     final List<String> cropList = crops.cast<String>().toList();
     Size size = MediaQuery.of(context).size;
-    return Listener(
-      onPointerDown: (_) {
+    return GestureDetector(
+      onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
         if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
           currentFocus.focusedChild.unfocus();

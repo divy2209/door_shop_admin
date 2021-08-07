@@ -4,7 +4,6 @@ import 'package:door_shop_admin/services/crop_profiling/crop_data.dart';
 import 'package:door_shop_admin/services/utility.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 // TODO: replace the dark background
@@ -38,8 +37,8 @@ class _CropAdditionState extends State<CropAddition> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Listener(
-      onPointerDown: (_) {
+    return GestureDetector(
+      onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
         if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
           currentFocus.focusedChild.unfocus();
@@ -247,7 +246,7 @@ class _CropAdditionState extends State<CropAddition> {
                             onPressed: () async {
                               if(identifier != null && cropName != null && price != null && quantity != null && unit != null){
                                 await CropDatabase().addupdateCropData(identifier: identifier, name: cropName, price: price, quantity: quantity, perUnit: unit);
-                                Fluttertoast.showToast(
+                                /*Fluttertoast.showToast(
                                   msg: '$cropName Added',
                                   toastLength: Toast.LENGTH_SHORT,
                                   gravity: ToastGravity.BOTTOM,
@@ -255,7 +254,7 @@ class _CropAdditionState extends State<CropAddition> {
                                   backgroundColor: Colors.grey[400],
                                   textColor: Palette.primaryColor,
                                   fontSize: 16
-                                );
+                                );*/
                                 _clear();
                               }
                             },

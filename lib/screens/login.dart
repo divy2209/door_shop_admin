@@ -1,8 +1,11 @@
 import 'package:door_shop_admin/services/admin_autherization/authorization.dart';
+import 'package:door_shop_admin/services/config.dart';
 import 'package:door_shop_admin/services/utility.dart';
 import 'package:door_shop_admin/services/admin_autherization/validate.dart';
 import 'package:door_shop_admin/widgets/loading.dart';
+import 'package:door_shop_admin/widgets/text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 // TODO: Door shop admin text not centered
 // TODO: add a sizedbox at the end
@@ -19,12 +22,15 @@ class _LoginPageState extends State<LoginPage> {
 
   static String email;
   static String password;
+
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
   
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return loading ? Loading() : Listener(
-      onPointerDown: (_){
+    return loading ? Loading() : GestureDetector(
+      onTap: (){
         FocusScopeNode currentFocus = FocusScope.of(context);
         if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
           currentFocus.focusedChild.unfocus();
@@ -53,43 +59,20 @@ class _LoginPageState extends State<LoginPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Container(
-                          height: size.height * 0.08,
-                          width: size.width * 0.8,
-                          decoration: Palette.textBoxDeco,
-                          child: Center(
-                            child: TextFormField(
-                              decoration: TextFieldInputDecoration.emailField,
-                              onChanged: (value){
-                                email = value.trim();
-                              },
-                              style: Palette.loginTextStyle,
-                              keyboardType: TextInputType.emailAddress,
-                              textInputAction: TextInputAction.next,
-                            ),
-                          ),
-                        ),
+                      InputField(
+                        isObscure: false,
+                        inputAction: TextInputAction.next,
+                        inputType: TextInputType.emailAddress,
+                        icon: FontAwesomeIcons.envelope,
+                        hintText: 'Email',
+                        controller: _emailController,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Container(
-                          height: size.height * 0.08,
-                          width: size.width * 0.8,
-                          decoration: Palette.textBoxDeco,
-                          child: Center(
-                            child: TextFormField(
-                              decoration: TextFieldInputDecoration.passwordField,
-                              onChanged: (value){
-                                password = value;
-                              },
-                              obscureText: true,
-                              style: Palette.loginTextStyle,
-                              textInputAction: TextInputAction.done,
-                            ),
-                          ),
-                        ),
+                      InputField(
+                        hintText: 'Password',
+                        icon: FontAwesomeIcons.lock,
+                        inputAction: TextInputAction.done,
+                        isObscure: true,
+                        controller: _passwordController,
                       ),
                       SizedBox(
                         height: 25,
@@ -100,13 +83,35 @@ class _LoginPageState extends State<LoginPage> {
                         decoration: Palette.buttonBoxDecoration,
                         child: TextButton(
                           onPressed: () async {
+                            email = DoorShopAdmin.sharedPreferences.getString('email');
+                            password = DoorShopAdmin.sharedPreferences.getString('password');
                             String showError = CredentialValidation().loginValidation(email: email, password: password);
                             if(showError == null){
                               setState(() {
                                 loading = true;
                               });
                               dynamic result = await _authorization.adminLogin(email: email, password: password);
-                              if (result == null){
+                              if (result == 505284406 || result == 185768934){
+                                setState(() {
+                                  loading = false;
+                                  if(result == 505284406){
+                                    showError = "Not a Admin Email!";
+                                  } else {
+                                    showError = "Incorrect password!";
+                                  }
+                                });
+                              }
+                            }
+                            if(showError != null){
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(showError),
+                                    backgroundColor: Palette.primaryColor.withOpacity(0.4),
+                                    duration: Duration(seconds: 5),
+                                  )
+                              );
+                            }
+                              /*if (result == null){
                                 setState(() {
                                   loading = false;
                                   print('Error');
@@ -132,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
                                   );
                                 }
                               );
-                            }
+                            }*/
                           },
                           child: Text(
                             'Admin Access',
