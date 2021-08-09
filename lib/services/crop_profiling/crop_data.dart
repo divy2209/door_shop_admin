@@ -9,13 +9,14 @@ class CropDatabase {
   final CollectionReference crop = FirebaseFirestore.instance.collection('crops');
   dynamic rupee = FontAwesomeIcons.rupeeSign;
 
-  Future addupdateCropData({String identifier, String name, int price, String perUnit, int quantity}) async {
+  Future addupdateCropData({String identifier, String name, int price, String perUnit, int quantity, int discount}) async {
     return await crop.doc(identifier).set({
       'crop uid': identifier,
       'crop name': name,
       'price $rupee': price,
       'quantity': quantity,
-      'pricing and quantity unit': perUnit
+      'pricing and quantity unit': perUnit,
+      'discount': discount,
     });
   }
 

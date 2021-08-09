@@ -64,11 +64,11 @@ class _LoginPageState extends State<LoginPage> {
                         inputAction: TextInputAction.next,
                         inputType: TextInputType.emailAddress,
                         icon: FontAwesomeIcons.envelope,
-                        hintText: 'Email',
+                        hintText: TextFieldHint.email,
                         controller: _emailController,
                       ),
                       InputField(
-                        hintText: 'Password',
+                        hintText: TextFieldHint.password,
                         icon: FontAwesomeIcons.lock,
                         inputAction: TextInputAction.done,
                         isObscure: true,
@@ -83,8 +83,8 @@ class _LoginPageState extends State<LoginPage> {
                         decoration: Palette.buttonBoxDecoration,
                         child: TextButton(
                           onPressed: () async {
-                            email = DoorShopAdmin.sharedPreferences.getString('email');
-                            password = DoorShopAdmin.sharedPreferences.getString('password');
+                            email = DoorShopAdmin.sharedPreferences.getString(DoorShopAdmin.email);
+                            password = DoorShopAdmin.sharedPreferences.getString(DoorShopAdmin.password);
                             String showError = CredentialValidation().loginValidation(email: email, password: password);
                             if(showError == null){
                               setState(() {

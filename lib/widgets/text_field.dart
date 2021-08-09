@@ -1,4 +1,4 @@
-import 'package:door_shop_admin/services/config.dart';
+import 'package:door_shop_admin/services/text_field_data.dart';
 import 'package:door_shop_admin/services/utility.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,18 +12,20 @@ class InputField extends StatelessWidget {
   final IconData icon;
   final String hintText;
   final FilteringTextInputFormatter inputFormat;
-  final dynamic arr;
+  final Color color;
+  final Color textColor;
 
   const InputField({
     Key key,
-    @required this.isObscure,
+    this.isObscure,
     @required this.inputAction,
     this.inputType,
     @required this.controller,
     @required this.icon,
     @required this.hintText,
     this.inputFormat,
-    this.arr,
+    this.color,
+    this.textColor
   }) : super(key: key);
 
   @override
@@ -45,21 +47,17 @@ class InputField extends StatelessWidget {
                     child: Icon(
                       icon,
                       size: 28,
-                      color: Colors.white,
+                      color: color ?? Colors.white,
                     ),
                   ),
                   hintText: hintText,
-                  hintStyle: Palette.loginTextStyle
+                  hintStyle: Palette.loginTextStyle.copyWith(color: textColor ?? Colors.white)
               ),
               onChanged: (value){
-                if(hintText == 'Email'){
-                  DoorShopAdmin.sharedPreferences.setString(DoorShopAdmin.email, value.trim());
-                } else if(hintText == 'Password'){
-                  DoorShopAdmin.sharedPreferences.setString(DoorShopAdmin.password, value);
-                }
+                TextFieldData.save(hintText, value);
               },
-              style: Palette.loginTextStyle,
-              obscureText: isObscure,
+              style: Palette.loginTextStyle.copyWith(color: textColor ?? Colors.white),
+              obscureText: isObscure ?? false,
               keyboardType: inputType,
               textInputAction: inputAction,
               inputFormatters: [inputFormat ?? FilteringTextInputFormatter.singleLineFormatter],
