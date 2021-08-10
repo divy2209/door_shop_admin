@@ -42,39 +42,44 @@ class _RadioFieldState extends State<RadioField> {
               ),
               Container(
                 width: size.width * 0.6,
-                child: Column(
-                  children: [
-                    RadioListTile(
-                      groupValue: unit,
-                      title: Text('Per 250 grams', style: Palette.cropFormInputTextStyle.copyWith(color: Colors.black)),
-                      value: 'per 250 grams',
-                      onChanged: (value) {
-                        setState(() {
-                          _save(value);
-                        });
-                      },
-                    ),
-                    RadioListTile(
-                      groupValue: unit,
-                      title: Text('Per 500 grams', style: Palette.cropFormInputTextStyle.copyWith(color: Colors.black)),
-                      value: 'per 500 grams',
-                      onChanged: (value) {
-                        setState(() {
-                          _save(value);
-                        });
-                      },
-                    ),
-                    RadioListTile(
-                      groupValue: unit,
-                      title: Text('Per Kg', style: Palette.cropFormInputTextStyle.copyWith(color: Colors.black)),
-                      value: 'per Kg',
-                      onChanged: (value) {
-                        setState(() {
-                          _save(value);
-                        });
-                      },
-                    ),
-                  ],
+                child: Theme(
+                  data: ThemeData(
+                    toggleableActiveColor: Palette.primaryColor
+                  ),
+                  child: Column(
+                    children: [
+                      RadioListTile(
+                        groupValue: unit,
+                        title: Text('Per 250 grams', style: Palette.cropFormInputTextStyle.copyWith(color: Colors.black)),
+                        value: 'per 250 grams',
+                        onChanged: (value) {
+                          setState(() {
+                            _save(value);
+                          });
+                        },
+                      ),
+                      RadioListTile(
+                        groupValue: unit,
+                        title: Text('Per 500 grams', style: Palette.cropFormInputTextStyle.copyWith(color: Colors.black)),
+                        value: 'per 500 grams',
+                        onChanged: (value) {
+                          setState(() {
+                            _save(value);
+                          });
+                        },
+                      ),
+                      RadioListTile(
+                        groupValue: unit,
+                        title: Text('Per Kg', style: Palette.cropFormInputTextStyle.copyWith(color: Colors.black)),
+                        value: 'per Kg',
+                        onChanged: (value) {
+                          setState(() {
+                            _save(value);
+                          });
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               )
             ],

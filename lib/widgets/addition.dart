@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:door_shop_admin/services/config.dart';
@@ -8,10 +9,18 @@ import 'package:door_shop_admin/widgets/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'radio_field.dart';
 
-class Addition extends StatelessWidget {
+class Addition extends StatefulWidget {
+
+
+  @override
+  _AdditionState createState() => _AdditionState();
+}
+
+class _AdditionState extends State<Addition> {
 
   static String identifier;
   static String cropName;
@@ -19,6 +28,8 @@ class Addition extends StatelessWidget {
   static int quantity;
   static String unit;
   static int discount;
+
+  File _imageFile;
 
   _retrieve(){
     identifier = DoorShopAdmin.sharedPreferences.getString(DoorShopAdmin.addIdentifier);
@@ -28,6 +39,7 @@ class Addition extends StatelessWidget {
     unit = DoorShopAdmin.sharedPreferences.getString(DoorShopAdmin.addUnit);
     discount = int.tryParse(DoorShopAdmin.sharedPreferences.getString(DoorShopAdmin.addDiscount));
   }
+
   final _identifierTextController = TextEditingController();
   final _nameTextController = TextEditingController();
   final _priceTextController = TextEditingController();
@@ -41,6 +53,15 @@ class Addition extends StatelessWidget {
     _priceTextController.clear();
     _quantityTextController.clear();
     TextFieldData.clear();
+    _imageFile = null;
+  }
+
+  Future<void> _selectImage() async {
+    XFile _xImageFile = await ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 50);
+    _imageFile = File(_xImageFile.path);
+    if(_imageFile != null) {
+      setState(() {});
+    }
   }
 
   @override
@@ -57,37 +78,42 @@ class Addition extends StatelessWidget {
                   child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
                     child: CircleAvatar(
-                      radius: size.width * 0.14,
+                      radius: size.width * 0.20,
                       backgroundColor: Colors.grey[400].withOpacity(0.4),
-                      child: Icon(
+                      backgroundImage: _imageFile==null ? null : FileImage(_imageFile),
+                      child: _imageFile==null ? Icon(
                         FontAwesomeIcons.carrot,
                         color: Palette.primaryColor,
                         size: size.width * 0.1,
-                      ),
+                      ) : null,
                     ),
                   ),
                 ),
               ),
               Positioned(
-                top: size.height * 0.08,
-                left: size.width * 0.55,
+                top: size.height * 0.11,
+                left: size.width * 0.58,
                 child: Container(
-                  height: size.width * 0.1,
-                  width: size.width * 0.1,
+                  height: size.width * 0.15,
+                  width: size.width * 0.15,
                   decoration: BoxDecoration(
                     color: Palette.primaryColor,
                     shape: BoxShape.circle,
                     border: Border.all(color: Colors.white, width: 2)
                   ),
-                  child: Icon(
-                    FontAwesomeIcons.plus,
-                    color: Colors.white,
+                  child: InkWell(
+                    splashColor: Colors.transparent,
+                    onTap: _selectImage,
+                    child: Icon(
+                      FontAwesomeIcons.plus,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               )
             ],
           ),
-          SizedBox(height: size.height * 0.1,),
+          SizedBox(height: size.height * 0.08),
           Form(
             child: Column(
               children: [
@@ -163,17 +189,26 @@ class Addition extends StatelessWidget {
                   child: TextButton(
                     onPressed: () async {
                       String showError;
-                      if(_identifierTextController.text.isNotEmpty && _nameTextController.text.isNotEmpty && _priceTextController.text.isNotEmpty && _quantityTextController.text.isNotEmpty && _discountTextController.text.isNotEmpty){
-                        _retrieve();
-                        if(identifier.isNotEmpty && cropName.isNotEmpty && price != null && quantity != null && unit.isNotEmpty && discount != null){
-                          await CropDatabase().addupdateCropData(identifier: identifier, name: cropName, price: price, quantity: quantity, perUnit: unit, discount: discount);
-                          showError = '$identifier added in the database';
-                          _clear();
+                      if(_imageFile != null){
+                        if(_identifierTextController.text.isNotEmpty && _nameTextController.text.isNotEmpty && _priceTextController.text.isNotEmpty && _quantityTextController.text.isNotEmpty && _discountTextController.text.isNotEmpty){
+                          _retrieve();
+                          if(identifier.isNotEmpty && cropName.isNotEmpty && price != null && quantity != null && unit.isNotEmpty && discount != null){
+                            String url = await CropDatabase().upload(_imageFile);
+                            if(url!=null){
+                              await CropDatabase().addupdateCropData(identifier: identifier, name: cropName, price: price, quantity: quantity, perUnit: unit, discount: discount, url: url);
+                              showError = '$identifier added in the database';
+                              _clear();
+                            } else {
+                              showError = 'Image not uploaded';
+                            }
+                          } else {
+                            showError = 'Fields cannot be left empty';
+                          }
                         } else {
                           showError = 'Fields cannot be left empty';
                         }
                       } else {
-                        showError = 'Fields cannot be left empty';
+                        showError = 'Select an image for the crop';
                       }
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(

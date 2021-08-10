@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:door_shop_admin/services/crop_profiling/crops.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CropDatabase {
@@ -9,7 +10,7 @@ class CropDatabase {
   final CollectionReference crop = FirebaseFirestore.instance.collection('crops');
   dynamic rupee = FontAwesomeIcons.rupeeSign;
 
-  Future addupdateCropData({String identifier, String name, int price, String perUnit, int quantity, int discount}) async {
+  Future addupdateCropData({String identifier, String name, int price, String perUnit, int quantity, int discount, String url}) async {
     return await crop.doc(identifier).set({
       'crop uid': identifier,
       'crop name': name,
@@ -17,7 +18,16 @@ class CropDatabase {
       'quantity': quantity,
       'pricing and quantity unit': perUnit,
       'discount': discount,
+      'image url': url
     });
+  }
+
+  Future upload(imageFile) async {
+    String imageFileName = DateTime.now().millisecondsSinceEpoch.toString();
+    Reference reference = FirebaseStorage.instance.ref().child(imageFileName);
+    await reference.putFile(imageFile);
+    String url = await reference.getDownloadURL();
+    return url;
   }
 
   List<CropId>_cropList(QuerySnapshot snap){
