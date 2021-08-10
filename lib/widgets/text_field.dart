@@ -54,7 +54,7 @@ class InputField extends StatelessWidget {
                   hintStyle: Palette.loginTextStyle.copyWith(color: textColor ?? Colors.white)
               ),
               onChanged: (value){
-                TextFieldData.save(hintText, value);
+                TextFieldData.save(hintText, value ?? '');
               },
               style: Palette.loginTextStyle.copyWith(color: textColor ?? Colors.white),
               obscureText: isObscure ?? false,

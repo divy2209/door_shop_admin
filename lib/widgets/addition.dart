@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'drop_down_field.dart';
+import 'radio_field.dart';
 
 class Addition extends StatelessWidget {
 
@@ -121,6 +121,7 @@ class Addition extends StatelessWidget {
                   inputType: TextInputType.number,
                   inputAction: TextInputAction.next,
                 ),
+                RadioField(),
                 InputField(
                   controller: _quantityTextController,
                   hintText: TextFieldHint.quantity,
@@ -130,7 +131,6 @@ class Addition extends StatelessWidget {
                   inputType: TextInputType.number,
                   inputAction: TextInputAction.done,
                 ),
-                DropDownField(),
                 SizedBox(height: 25),
                 InputField(
                   controller: _discountTextController,
@@ -162,11 +162,16 @@ class Addition extends StatelessWidget {
                   decoration: Palette.buttonBoxDecoration,
                   child: TextButton(
                     onPressed: () async {
-                      _retrieve();
                       String showError;
-                      if(identifier != null && cropName != null && price != null && quantity != null && unit != null){
-                        await CropDatabase().addupdateCropData(identifier: identifier, name: cropName, price: price, quantity: quantity, perUnit: unit, discount: discount);
-                        showError = '$identifier added in the database';
+                      if(_identifierTextController.text.isNotEmpty && _nameTextController.text.isNotEmpty && _priceTextController.text.isNotEmpty && _quantityTextController.text.isNotEmpty && _discountTextController.text.isNotEmpty){
+                        _retrieve();
+                        if(identifier.isNotEmpty && cropName.isNotEmpty && price != null && quantity != null && unit.isNotEmpty && discount != null){
+                          await CropDatabase().addupdateCropData(identifier: identifier, name: cropName, price: price, quantity: quantity, perUnit: unit, discount: discount);
+                          showError = '$identifier added in the database';
+                          _clear();
+                        } else {
+                          showError = 'Fields cannot be left empty';
+                        }
                       } else {
                         showError = 'Fields cannot be left empty';
                       }
@@ -177,7 +182,6 @@ class Addition extends StatelessWidget {
                           duration: Duration(seconds: 5),
                         )
                       );
-                      _clear();
                     },
                     child: Text(
                       'Add Crop',
