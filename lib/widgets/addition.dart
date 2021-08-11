@@ -8,6 +8,7 @@ import 'package:door_shop_admin/services/utility.dart';
 import 'package:door_shop_admin/widgets/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -28,6 +29,8 @@ class _AdditionState extends State<Addition> {
   static int quantity;
   static String unit;
   static int discount;
+
+  bool addload = false;
 
   File _imageFile;
 
@@ -53,7 +56,9 @@ class _AdditionState extends State<Addition> {
     _priceTextController.clear();
     _quantityTextController.clear();
     TextFieldData.clear();
-    _imageFile = null;
+    setState(() {
+      _imageFile = null;
+    });
   }
 
   Future<void> _selectImage() async {
@@ -147,7 +152,7 @@ class _AdditionState extends State<Addition> {
                   color: Palette.primaryColor,
                   textColor: Colors.black,
                   inputType: TextInputType.number,
-                  inputAction: TextInputAction.next,
+                  inputAction: TextInputAction.done,
                 ),
                 RadioField(),
                 InputField(
@@ -157,7 +162,7 @@ class _AdditionState extends State<Addition> {
                   color: Palette.primaryColor,
                   textColor: Colors.black,
                   inputType: TextInputType.number,
-                  inputAction: TextInputAction.done,
+                  inputAction: TextInputAction.next,
                 ),
                 SizedBox(height: 25),
                 InputField(
@@ -166,7 +171,7 @@ class _AdditionState extends State<Addition> {
                   icon: FontAwesomeIcons.percentage,
                   color: Palette.primaryColor,
                   textColor: Colors.black,
-                  inputAction: TextInputAction.next,
+                  inputAction: TextInputAction.done,
                   inputType: TextInputType.number,
                 ),
                 Container(
@@ -195,6 +200,9 @@ class _AdditionState extends State<Addition> {
                         if(_identifierTextController.text.isNotEmpty && _nameTextController.text.isNotEmpty && _priceTextController.text.isNotEmpty && _quantityTextController.text.isNotEmpty && _discountTextController.text.isNotEmpty){
                           _retrieve();
                           if(identifier.isNotEmpty && cropName.isNotEmpty && price != null && quantity != null && unit.isNotEmpty && discount != null){
+                            setState(() {
+                              addload = true;
+                            });
                             String url = await CropDatabase().upload(_imageFile);
                             if(url!=null){
                               await CropDatabase().addupdateCropData(identifier: identifier, name: cropName, price: price, quantity: quantity, perUnit: unit, discount: discount, url: url);
@@ -219,8 +227,14 @@ class _AdditionState extends State<Addition> {
                           duration: Duration(seconds: 5),
                         )
                       );
+                      setState(() {
+                        addload = false;
+                      });
                     },
-                    child: Text(
+                    child: addload ? SpinKitThreeBounce(
+                      color: Colors.white,
+                      size: 30,
+                    ) : Text(
                       'Add Crop',
                       style: Palette.buttonTextStyle,
                     ),
