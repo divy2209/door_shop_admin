@@ -13,7 +13,6 @@ class RadioField extends StatefulWidget {
 
 class _RadioFieldState extends State<RadioField> {
   static String unit;
-  final List<String> unitList = ['per Kg', 'per 250 grams', 'per 500 grams'];
 
   _save(value){
     unit = value;
@@ -26,7 +25,7 @@ class _RadioFieldState extends State<RadioField> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Container(
-        height: size.height * 0.20,
+        height: size.height * 0.165,
         width: size.width * 0.8,
         decoration: Palette.textBoxDeco,
         child: Center(
@@ -44,39 +43,49 @@ class _RadioFieldState extends State<RadioField> {
                 width: size.width * 0.6,
                 child: Theme(
                   data: ThemeData(
-                    toggleableActiveColor: Palette.primaryColor
+                    toggleableActiveColor: Palette.primaryColor,
+                    splashColor: Colors.transparent
                   ),
                   child: Column(
                     children: [
-                      RadioListTile(
-                        groupValue: unit,
-                        title: Text('Per 250 grams', style: Palette.cropFormInputTextStyle.copyWith(color: Colors.black)),
-                        value: 'per 250 grams',
-                        onChanged: (value) {
-                          setState(() {
-                            _save(value);
-                          });
-                        },
+                      SizedBox(
+                        height: 40,
+                        child: RadioListTile(
+                          groupValue: unit,
+                          title: Text('Per 250 grams', style: Palette.cropFormInputTextStyle.copyWith(color: Colors.black)),
+                          value: 'per 250 grams',
+                          onChanged: (value) {
+                            setState(() {
+                              _save(value);
+                            });
+                          },
+                        ),
                       ),
-                      RadioListTile(
-                        groupValue: unit,
-                        title: Text('Per 500 grams', style: Palette.cropFormInputTextStyle.copyWith(color: Colors.black)),
-                        value: 'per 500 grams',
-                        onChanged: (value) {
-                          setState(() {
-                            _save(value);
-                          });
-                        },
+                      SizedBox(
+                        height: 40,
+                        child: RadioListTile(
+                          groupValue: unit,
+                          title: Text('Per 500 grams', style: Palette.cropFormInputTextStyle.copyWith(color: Colors.black)),
+                          value: 'per 500 grams',
+                          onChanged: (value) {
+                            setState(() {
+                              _save(value);
+                            });
+                          },
+                        ),
                       ),
-                      RadioListTile(
-                        groupValue: unit,
-                        title: Text('Per Kg', style: Palette.cropFormInputTextStyle.copyWith(color: Colors.black)),
-                        value: 'per Kg',
-                        onChanged: (value) {
-                          setState(() {
-                            _save(value);
-                          });
-                        },
+                      SizedBox(
+                        height: 40,
+                        child: RadioListTile(
+                          groupValue: unit,
+                          title: Text('Per Kg', style: Palette.cropFormInputTextStyle.copyWith(color: Colors.black)),
+                          value: 'per Kg',
+                          onChanged: (value) {
+                            setState(() {
+                              _save(value);
+                            });
+                          },
+                        ),
                       ),
                     ],
                   ),

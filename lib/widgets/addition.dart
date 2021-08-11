@@ -58,9 +58,11 @@ class _AdditionState extends State<Addition> {
 
   Future<void> _selectImage() async {
     XFile _xImageFile = await ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 50);
-    _imageFile = File(_xImageFile.path);
-    if(_imageFile != null) {
-      setState(() {});
+    if(_xImageFile!=null){
+      _imageFile = File(_xImageFile.path);
+      if(_imageFile != null) {
+        setState(() {});
+      }
     }
   }
 
