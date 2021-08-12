@@ -1,8 +1,8 @@
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:door_shop_admin/services/config.dart';
 import 'package:door_shop_admin/services/crop_profiling/crop_data.dart';
+import 'package:door_shop_admin/services/image_data.dart';
 import 'package:door_shop_admin/services/text_field_data.dart';
 import 'package:door_shop_admin/services/utility.dart';
 import 'package:door_shop_admin/widgets/text_field.dart';
@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 import 'radio_field.dart';
 
@@ -32,7 +32,6 @@ class _AdditionState extends State<Addition> {
 
   bool addload = false;
 
-  File _imageFile;
 
   _retrieve(){
     identifier = DoorShopAdmin.sharedPreferences.getString(DoorShopAdmin.addIdentifier);
@@ -56,24 +55,12 @@ class _AdditionState extends State<Addition> {
     _priceTextController.clear();
     _quantityTextController.clear();
     TextFieldData.clear();
-    setState(() {
-      _imageFile = null;
-    });
-  }
-
-  Future<void> _selectImage() async {
-    XFile _xImageFile = await ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 50);
-    if(_xImageFile!=null){
-      _imageFile = File(_xImageFile.path);
-      if(_imageFile != null) {
-        setState(() {});
-      }
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final image = Provider.of<ImageData>(context, listen: false);
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -84,15 +71,19 @@ class _AdditionState extends State<Addition> {
                 child: ClipOval(
                   child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-                    child: CircleAvatar(
-                      radius: size.width * 0.20,
-                      backgroundColor: Colors.grey[400].withOpacity(0.4),
-                      backgroundImage: _imageFile==null ? null : FileImage(_imageFile),
-                      child: _imageFile==null ? Icon(
-                        FontAwesomeIcons.carrot,
-                        color: Palette.primaryColor,
-                        size: size.width * 0.1,
-                      ) : null,
+                    child: Consumer<ImageData>(
+                      builder: (context, image, child){
+                        return CircleAvatar(
+                          radius: size.width * 0.20,
+                          backgroundColor: Colors.grey[400].withOpacity(0.4),
+                          backgroundImage: image.imageFile==null ? null : FileImage(image.imageFile),
+                          child: image.imageFile==null ? Icon(
+                            FontAwesomeIcons.carrot,
+                            color: Palette.primaryColor,
+                            size: size.width * 0.1,
+                          ) : null,
+                        );
+                      },
                     ),
                   ),
                 ),
@@ -104,13 +95,15 @@ class _AdditionState extends State<Addition> {
                   height: size.width * 0.15,
                   width: size.width * 0.15,
                   decoration: BoxDecoration(
-                    color: Palette.primaryColor,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 2)
+                      color: Palette.primaryColor,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.white, width: 2)
                   ),
                   child: InkWell(
                     splashColor: Colors.transparent,
-                    onTap: _selectImage,
+                    onTap: () async {
+                      image.getImage();
+                    },
                     child: Icon(
                       FontAwesomeIcons.plus,
                       color: Colors.white,
@@ -180,6 +173,7 @@ class _AdditionState extends State<Addition> {
                   child: GestureDetector(
                     onTap: (){
                       _clear();
+                      image.clearImage();
                     },
                     child: Text(
                       'Clear Form',
@@ -196,18 +190,19 @@ class _AdditionState extends State<Addition> {
                   child: TextButton(
                     onPressed: () async {
                       String showError;
-                      if(_imageFile != null){
+                      if(image.imageFile != null){
                         if(_identifierTextController.text.isNotEmpty && _nameTextController.text.isNotEmpty && _priceTextController.text.isNotEmpty && _quantityTextController.text.isNotEmpty && _discountTextController.text.isNotEmpty){
                           _retrieve();
                           if(identifier.isNotEmpty && cropName.isNotEmpty && price != null && quantity != null && unit.isNotEmpty && discount != null){
                             setState(() {
                               addload = true;
                             });
-                            String url = await CropDatabase().upload(_imageFile);
+                            String url = await CropDatabase().upload(image.imageFile);
                             if(url!=null){
                               await CropDatabase().addupdateCropData(identifier: identifier, name: cropName, price: price, quantity: quantity, perUnit: unit, discount: discount, url: url);
                               showError = '$identifier added in the database';
                               _clear();
+                              image.clearImage();
                             } else {
                               showError = 'Image not uploaded';
                             }

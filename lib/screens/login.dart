@@ -83,6 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                                         showError = "Not an Admin Email!";
                                       } else {
                                         showError = "Incorrect password!";
+                                        _passwordController.clear();
                                       }
                                     });
                                   }
