@@ -1,6 +1,5 @@
+import 'package:door_shop_admin/services/addition_data.dart';
 import 'package:door_shop_admin/services/admin_autherization/authorization.dart';
-import 'package:door_shop_admin/services/image_data.dart';
-import 'package:door_shop_admin/services/text_field_data.dart';
 import 'package:door_shop_admin/services/utility.dart';
 import 'package:door_shop_admin/widgets/addition.dart';
 import 'package:door_shop_admin/widgets/loading.dart';
@@ -22,8 +21,8 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     //Size size = MediaQuery.of(context).size;
-    return ChangeNotifierProvider<ImageData>(
-      create: (context) => ImageData(),
+    return ChangeNotifierProvider<AdditionData>(
+      create: (context) => AdditionData(),
       child: loading ? Loading() : GestureDetector(
         onTap: () {
           FocusScopeNode currentFocus = FocusScope.of(context);
@@ -62,7 +61,6 @@ class _HomeState extends State<Home> {
                         loading = true;
                       });
                       await _authorization.signOut();
-                      TextFieldData.clear();
                     }
                   });
                 },

@@ -1,7 +1,10 @@
-import 'package:door_shop_admin/services/text_field_data.dart';
+import 'package:door_shop_admin/services/addition_data.dart';
+import 'package:door_shop_admin/services/config.dart';
+import 'package:door_shop_admin/services/login_data.dart';
 import 'package:door_shop_admin/services/utility.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 class InputField extends StatelessWidget {
 
@@ -14,6 +17,8 @@ class InputField extends StatelessWidget {
   final FilteringTextInputFormatter inputFormat;
   final Color color;
   final Color textColor;
+  final int textLength;
+  final String form;
 
   const InputField({
     Key key,
@@ -25,7 +30,9 @@ class InputField extends StatelessWidget {
     @required this.hintText,
     this.inputFormat,
     this.color,
-    this.textColor
+    this.textColor,
+    this.textLength,
+    @required this.form
   }) : super(key: key);
 
   @override
@@ -40,6 +47,7 @@ class InputField extends StatelessWidget {
         child: Center(
             child: TextFormField(
               controller: controller,
+              cursorColor: Palette.primaryColor,
               decoration: InputDecoration(
                   border: InputBorder.none,
                   prefixIcon: Padding(
@@ -54,13 +62,17 @@ class InputField extends StatelessWidget {
                   hintStyle: Palette.loginTextStyle.copyWith(color: textColor ?? Colors.white)
               ),
               onChanged: (value){
-                TextFieldData.save(hintText, value ?? '');
+                if(form == FormIdentifier.login){
+                  Provider.of<LoginData>(context, listen: false).login(value, hintText);
+                } else if(form == FormIdentifier.addition){
+                  Provider.of<AdditionData>(context, listen: false).add(value, hintText);
+                }
               },
               style: Palette.loginTextStyle.copyWith(color: textColor ?? Colors.white),
               obscureText: isObscure ?? false,
               keyboardType: inputType,
               textInputAction: inputAction,
-              inputFormatters: [inputFormat ?? FilteringTextInputFormatter.singleLineFormatter],
+              inputFormatters: [inputFormat ?? FilteringTextInputFormatter.singleLineFormatter, LengthLimitingTextInputFormatter(textLength ?? 500)],
             )
         ),
       ),
