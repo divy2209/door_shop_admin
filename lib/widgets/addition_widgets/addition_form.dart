@@ -1,4 +1,4 @@
-import 'package:door_shop_admin/services/addition_data.dart';
+import 'package:door_shop_admin/services/provider_data/addition_data.dart';
 import 'package:door_shop_admin/services/config.dart';
 import 'package:door_shop_admin/services/utility.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
-import '../addition_radio_field.dart';
+import 'addition_radio_field.dart';
 import '../text_field.dart';
 
 class AdditionForm extends StatelessWidget {

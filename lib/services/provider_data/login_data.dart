@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class LoginData extends ChangeNotifier {
   String email;
   String password;
+  bool pageloading = false;
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -20,6 +21,11 @@ class LoginData extends ChangeNotifier {
   void clearPass(){
     passwordController.clear();
     password = null;
+    notifyListeners();
+  }
+
+  void pageLoading(){
+    pageloading = !pageloading;
     notifyListeners();
   }
 

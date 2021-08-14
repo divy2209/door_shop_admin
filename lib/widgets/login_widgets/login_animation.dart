@@ -24,9 +24,8 @@ class LoginAnimatedText extends StatelessWidget {
                   TypewriterAnimatedText(
                     'Door Shop',
                     cursor: '|',
-                    curve: Curves.decelerate,
                     textAlign: TextAlign.start,
-                    speed: Duration(milliseconds: 150),
+                    speed: Duration(milliseconds: 180),
                   ),
                 ],
               ),
@@ -40,7 +39,7 @@ class LoginAnimatedText extends StatelessWidget {
                   fontSize: 30
               ),
               child: DelayedDisplay(
-                  delay: Duration(milliseconds: 3650),
+                  delay: Duration(milliseconds: 4100),
                   child: Text('Admin')
               ),
             ),

@@ -18,6 +18,8 @@ class AdditionData extends ChangeNotifier{
   final quantityTextController = TextEditingController();
   final discountTextController = TextEditingController();
 
+  bool buttonload = false;
+
   void add(String str, String hint){
     if(hint == TextFieldHint.identifier){
       cropIdentifier = str;
@@ -61,6 +63,11 @@ class AdditionData extends ChangeNotifier{
     quantityTextController.clear();
     discountTextController.clear();
 
+    notifyListeners();
+  }
+
+  void buttonLoad(bool load){
+    buttonload = load;
     notifyListeners();
   }
 

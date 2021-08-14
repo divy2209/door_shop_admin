@@ -1,5 +1,5 @@
 import 'package:door_shop_admin/services/config.dart';
-import 'package:door_shop_admin/services/login_data.dart';
+import 'package:door_shop_admin/services/provider_data/login_data.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';

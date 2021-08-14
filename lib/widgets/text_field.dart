@@ -1,6 +1,6 @@
-import 'package:door_shop_admin/services/addition_data.dart';
+import 'package:door_shop_admin/services/provider_data/addition_data.dart';
 import 'package:door_shop_admin/services/config.dart';
-import 'package:door_shop_admin/services/login_data.dart';
+import 'package:door_shop_admin/services/provider_data/login_data.dart';
 import 'package:door_shop_admin/services/utility.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

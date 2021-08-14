@@ -1,13 +1,21 @@
+import 'dart:io';
 import 'dart:ui';
 
-import 'package:door_shop_admin/services/addition_data.dart';
+import 'package:door_shop_admin/services/provider_data/addition_data.dart';
+import 'package:door_shop_admin/services/config.dart';
 import 'package:door_shop_admin/services/utility.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class CropImage extends StatelessWidget {
-
+  final File imageFile;
+  final String form;
+  CropImage({
+    @required this.form,
+    @required this.imageFile,
+});
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -17,19 +25,15 @@ class CropImage extends StatelessWidget {
           child: ClipOval(
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-              child: Consumer<AdditionData>(
-                builder: (context, image, child){
-                  return CircleAvatar(
-                    radius: size.width * 0.20,
-                    backgroundColor: Colors.grey[400].withOpacity(0.4),
-                    backgroundImage: image.imageFile==null ? null : FileImage(image.imageFile),
-                    child: image.imageFile==null ? Icon(
-                      FontAwesomeIcons.carrot,
-                      color: Palette.primaryColor,
-                      size: size.width * 0.1,
-                    ) : null,
-                  );
-                },
+              child: CircleAvatar(
+                radius: size.width * 0.20,
+                backgroundColor: Colors.grey[400].withOpacity(0.4),
+                backgroundImage: imageFile==null ? null : FileImage(imageFile),
+                child: imageFile==null ? Icon(
+                  FontAwesomeIcons.carrot,
+                  color: Palette.primaryColor,
+                  size: size.width * 0.1,
+                ) : null,
               ),
             ),
           ),
@@ -48,7 +52,11 @@ class CropImage extends StatelessWidget {
             child: InkWell(
               splashColor: Colors.transparent,
               onTap: () async {
-                Provider.of<AdditionData>(context, listen: false).getImage();
+                if(await Permission.camera.request().isGranted && await Permission.storage.request().isGranted){
+                  if(form == FormIdentifier.addition){
+                    Provider.of<AdditionData>(context, listen: false).getImage();
+                  }
+                }
               },
               child: Icon(
                 FontAwesomeIcons.plus,
