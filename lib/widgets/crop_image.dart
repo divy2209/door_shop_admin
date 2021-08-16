@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:door_shop_admin/services/provider_data/addition_data.dart';
 import 'package:door_shop_admin/services/config.dart';
 import 'package:door_shop_admin/services/utility.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -56,6 +57,35 @@ class CropImage extends StatelessWidget {
                   if(form == FormIdentifier.addition){
                     Provider.of<AdditionData>(context, listen: false).getImage();
                   }
+                } else {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                        title: Text('Camera and Gallery Permission'),
+                        content: Text(
+                            'This app needs camera and gallery access to take pictures for upload crop profile photo'),
+                        actions: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 40),
+                            child: Row(
+                              children: [
+                                TextButton(
+                                  child: Text('Deny'),
+                                  onPressed: () => Navigator.of(context).pop(),
+                                ),
+                                Spacer(),
+                                TextButton(
+                                  child: Text('Settings'),
+                                  onPressed: (){
+                                    openAppSettings();
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ));
                 }
               },
               child: Icon(
