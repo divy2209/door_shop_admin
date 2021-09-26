@@ -1,6 +1,7 @@
 import 'package:door_shop_admin/services/admin_autherization/admin_user.dart';
 import 'package:door_shop_admin/services/admin_autherization/authorization.dart';
 import 'package:door_shop_admin/services/admin_autherization/wrapper.dart';
+import 'package:door_shop_admin/services/provider_data/updation_data.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -33,13 +34,16 @@ class MyApp extends StatelessWidget {
     return StreamProvider<AdminID>.value(
       value: AuthorizationService().admin,
       initialData: null,
-      child: MaterialApp(
-        title: "Door Shop Admin",
-        theme: ThemeData(
-          visualDensity: VisualDensity.adaptivePlatformDensity
+      child: ChangeNotifierProvider(
+        create: (_) => UpdationData(),
+        child: MaterialApp(
+          title: "Door Shop Admin",
+          theme: ThemeData(
+            visualDensity: VisualDensity.adaptivePlatformDensity
+          ),
+          home: Wrapper(),
+          debugShowCheckedModeBanner: false,
         ),
-        home: Wrapper(),
-        debugShowCheckedModeBanner: false,
       ),
     );
   }

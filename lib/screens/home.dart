@@ -1,12 +1,16 @@
-import 'package:door_shop_admin/services/provider_data/addition_data.dart';
+import 'package:door_shop_admin/services/crop_profiling/crop_data.dart';
+import 'package:door_shop_admin/services/crop_profiling/crops.dart';
 import 'package:door_shop_admin/services/admin_autherization/authorization.dart';
 import 'package:door_shop_admin/services/provider_data/home_data.dart';
+import 'package:door_shop_admin/services/provider_data/updation_data.dart';
 import 'package:door_shop_admin/services/utility.dart';
-import 'package:door_shop_admin/widgets/addition_widgets/addition.dart';
+import 'package:door_shop_admin/widgets/home_widgets/croplist.dart';
 import 'package:door_shop_admin/widgets/loading.dart';
-import 'package:door_shop_admin/widgets/updation_widgets/updation.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+
+import 'add_crop.dart';
 
 // TODO: make a add page for vegetables and update page to update the pricing
 
@@ -16,8 +20,9 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<AdditionData>(
-      create: (context) => AdditionData(),
+    return StreamProvider<List<Crop>>.value(
+      value: CropDatabase().cropsData,
+      initialData: null,
       child: Consumer<HomeData>(
         builder: (context, home, child){
           return home.pageloading ? Loading() : GestureDetector(
@@ -29,11 +34,15 @@ class Home extends StatelessWidget {
             },
             child: Scaffold(
               appBar: AppBar(
-                backgroundColor: Palette.primaryColor,
+                backgroundColor: Colors.transparent,
                 elevation: 0,
-                title: Text('Door Shop Admin'),
+                title: Text('Door Shop Admin', style: TextStyle(color: Palette.primaryColor),),
+                centerTitle: true,
                 actions: [
                   PopupMenuButton<int>(
+                    //icon: Icon(Icons.arrow_drop_down, color: Palette.primaryColor, size: 28,),
+                    //color: Colors.black,
+                    icon: Icon(FontAwesomeIcons.ellipsisV, color: Palette.primaryColor, size: 18,),
                     itemBuilder: (context) => [
                       PopupMenuItem<int>(
                         value: 0,
@@ -60,35 +69,32 @@ class Home extends StatelessWidget {
                   ),
                 ],
               ),
-              body: DefaultTabController(
-                length: 2,
-                child: Column(
-                  children: [
-                    TabBar(
-                      tabs: [
-                        Tab(
-                          text: 'Addition',
+              body: Stack(
+                children: [
+                  CropList(),
+                  Positioned(
+                    right: 60,
+                    bottom: 60,
+                    child: GestureDetector(
+                      onTap: (){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => AddCropScreen())
+                        );
+                      },
+                      child: Container(
+                        height: 80,
+                        width: 80,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300].withOpacity(0.5),
+                          borderRadius: BorderRadius.all(Radius.circular(50))
                         ),
-                        Tab(
-                          text: 'Updation',
-                        )
-                      ],
-                      indicatorColor: Palette.primaryColor,
-                      labelColor: Palette.primaryColor,
-                      unselectedLabelColor: Palette.primaryColor.withOpacity(0.5),
-                      labelStyle: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    Expanded(
-                      child: TabBarView(
-                        children: [
-                          Addition(),
-                          Updation()
-                        ],
+                        child: Icon(FontAwesomeIcons.plus, color: Palette.primaryColor, size: 25,),
                       ),
-                    )
-                  ],
-                ),
-              ),
+                    ),
+                  ),
+                ],
+              )
             ),
           );
         },

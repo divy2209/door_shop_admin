@@ -3,6 +3,7 @@ import 'package:door_shop_admin/services/crop_profiling/crops.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+
 class CropDatabase {
   final String uid;
   CropDatabase({this.uid});
@@ -30,26 +31,21 @@ class CropDatabase {
     return url;
   }
 
-  List<CropId>_cropList(QuerySnapshot snap){
-    return snap.docs.map((document){
-       return CropId(
-         uid: document.get('crop uid') ?? '',
-       );
-      }
-    ).toList();
+  List<Crop> _cropsDataList(QuerySnapshot snap){
+    return snap.docs.map((doc){
+      return Crop(
+          identifier: doc.get('crop uid'),
+          name: doc.get('crop name'),
+          price: doc.get('price $rupee'),
+          quantity: doc.get('quantity'),
+          unit: doc.get('pricing and quantity unit'),
+          discount: doc.get('discount'),
+          url: doc.get('image url')
+      );
+    }).toList();
   }
 
-  Crop _cropData(DocumentSnapshot snap){
-    return Crop(
-      identifier: uid,
-      name: snap.get('crop name'),
-      price: snap.get('price $rupee'),
-      quantity: snap.get('quantity'),
-      unit: snap.get('pricing and quantity unit')
-    );
-  }
-
-  Stream<Crop> get cropData{
-    return crop.doc(uid).snapshots().map(_cropData);
+  Stream<List<Crop>>get cropsData{
+    return crop.snapshots().map(_cropsDataList);
   }
 }

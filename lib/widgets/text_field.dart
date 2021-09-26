@@ -19,19 +19,23 @@ class InputField extends StatelessWidget {
   final Color textColor;
   final int textLength;
   final String form;
+  final bool disable;
+  final String text;
 
   const InputField({
     Key key,
     this.isObscure,
     @required this.inputAction,
     this.inputType,
-    @required this.controller,
+    this.controller,
     @required this.icon,
     @required this.hintText,
     this.inputFormat,
     this.color,
     this.textColor,
     this.textLength,
+    this.disable,
+    this.text,
     @required this.form
   }) : super(key: key);
 
@@ -46,7 +50,9 @@ class InputField extends StatelessWidget {
         decoration: Palette.textBoxDeco,
         child: Center(
             child: TextFormField(
-              controller: controller,
+              enabled: disable!=null ? !disable : true,
+              controller: text==null ? controller : null,
+              initialValue: text,
               cursorColor: Palette.primaryColor,
               decoration: InputDecoration(
                   border: InputBorder.none,
@@ -67,6 +73,7 @@ class InputField extends StatelessWidget {
                 } else if(form == FormIdentifier.addition){
                   Provider.of<AdditionData>(context, listen: false).add(value, hintText);
                 }
+                //text = value;
               },
               style: Palette.loginTextStyle.copyWith(color: textColor ?? Colors.white),
               obscureText: isObscure ?? false,

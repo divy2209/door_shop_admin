@@ -1,5 +1,5 @@
-import 'package:door_shop_admin/services/provider_data/addition_data.dart';
 import 'package:door_shop_admin/services/config.dart';
+import 'package:door_shop_admin/services/provider_data/updation_data.dart';
 import 'package:door_shop_admin/services/utility.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,16 +7,18 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 
-class AdditionRadioField extends StatelessWidget {
+class UpdationRadioField extends StatelessWidget {
 
   final String form;
-  AdditionRadioField({@required this.form});
+  UpdationRadioField({@required this.form});
+
 
   final List<String> options = ['250 grams', '500 grams', '1 Kg'];
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Container(
@@ -41,8 +43,8 @@ class AdditionRadioField extends StatelessWidget {
                       toggleableActiveColor: Palette.primaryColor,
                       splashColor: Colors.transparent
                   ),
-                  child: Consumer<AdditionData>(
-                    builder: (context, addition, child){
+                  child: Consumer<UpdationData>(
+                    builder: (context, updation, child){
                       return ListView.builder(
                         physics: NeverScrollableScrollPhysics(),
                         itemCount: options.length,
@@ -50,11 +52,11 @@ class AdditionRadioField extends StatelessWidget {
                           return SizedBox(
                             height: 40,
                             child: RadioListTile(
-                              groupValue: addition.unit,
+                              groupValue: updation.unit,
                               value: options[index],
                               title: Text(options[index], style: Palette.cropFormInputTextStyle.copyWith(color: Colors.black)),
                               onChanged: (value) {
-                                addition.add(value, TextFieldHint.unit);
+                                updation.update(value, TextFieldHint.unit);
                               },
                             ),
                           );
@@ -71,3 +73,4 @@ class AdditionRadioField extends StatelessWidget {
     );
   }
 }
+
