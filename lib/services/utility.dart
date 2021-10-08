@@ -121,3 +121,8 @@ mixin TextFieldInputDecoration{
   );
 
 }
+
+mixin Status{
+  static final List<String> status = ['Order Placed', 'Processing', 'In Transit', 'Out for Delivery', 'Delivered'];
+  static final List<Color> statusColor = [Colors.deepOrangeAccent.shade100, Colors.deepOrangeAccent.shade200, Colors.deepOrangeAccent.shade200, Colors.green.shade300, Colors.green];
+}

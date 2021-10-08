@@ -1,8 +1,8 @@
+import 'package:door_shop_admin/screens/orders.dart';
 import 'package:door_shop_admin/services/crop_profiling/crop_data.dart';
 import 'package:door_shop_admin/services/crop_profiling/crops.dart';
 import 'package:door_shop_admin/services/admin_autherization/authorization.dart';
 import 'package:door_shop_admin/services/provider_data/home_data.dart';
-import 'package:door_shop_admin/services/provider_data/updation_data.dart';
 import 'package:door_shop_admin/services/utility.dart';
 import 'package:door_shop_admin/widgets/home_widgets/croplist.dart';
 import 'package:door_shop_admin/widgets/loading.dart';
@@ -40,10 +40,23 @@ class Home extends StatelessWidget {
                 centerTitle: true,
                 actions: [
                   PopupMenuButton<int>(
-                    //icon: Icon(Icons.arrow_drop_down, color: Palette.primaryColor, size: 28,),
-                    //color: Colors.black,
                     icon: Icon(FontAwesomeIcons.ellipsisV, color: Palette.primaryColor, size: 18,),
                     itemBuilder: (context) => [
+                      PopupMenuItem<int>(
+                        value: 0,
+                        child: Row(
+                          children: [
+                            Icon(
+                              FontAwesomeIcons.shoppingBag,
+                              color: Colors.red,
+                            ),
+                            const SizedBox(
+                              width: 6,
+                            ),
+                            Text('Orders')
+                          ],
+                        ),
+                      ),
                       PopupMenuItem<int>(
                         value: 0,
                         child: Row(
@@ -62,6 +75,11 @@ class Home extends StatelessWidget {
                     ],
                     onSelected: (item) async {
                       if(item == 0){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context)=>Orders())
+                        );
+                      } else {
                         home.pageLoading();
                         await _authorization.signOut();
                       }

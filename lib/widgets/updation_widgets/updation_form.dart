@@ -1,5 +1,4 @@
 import 'package:door_shop_admin/services/config.dart';
-import 'package:door_shop_admin/services/crop_profiling/crops.dart';
 import 'package:door_shop_admin/services/provider_data/updation_data.dart';
 import 'package:door_shop_admin/services/utility.dart';
 import 'package:door_shop_admin/widgets/updation_widgets/updation_radio_field.dart';
@@ -12,9 +11,6 @@ import '../text_field.dart';
 
 class UpdationForm extends StatelessWidget {
   final String form = FormIdentifier.updation;
-  //final Crop crop;
-
-  //UpdationForm({this.crop});
 
   @override
   Widget build(BuildContext context) {

@@ -36,7 +36,8 @@ class AddButton extends StatelessWidget {
 
             String url = await CropDatabase().upload(addition.imageFile);
             if(url!=null){
-              await CropDatabase().addupdateCropData(identifier: identifier, name: cropName, price: price, quantity: quantity, perUnit: unit, discount: discount, url: url);
+              List<String> searchList = AdditionData().generateSearchList(cropName);
+              await CropDatabase().addupdateCropData(identifier: identifier, name: cropName, price: price, quantity: quantity, perUnit: unit, discount: discount, url: url, searchList: searchList);
               showError = '$identifier added in the database';
               addition.clear();
             } else {

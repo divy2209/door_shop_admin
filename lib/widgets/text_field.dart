@@ -1,6 +1,7 @@
 import 'package:door_shop_admin/services/provider_data/addition_data.dart';
 import 'package:door_shop_admin/services/config.dart';
 import 'package:door_shop_admin/services/provider_data/login_data.dart';
+import 'package:door_shop_admin/services/provider_data/updation_data.dart';
 import 'package:door_shop_admin/services/utility.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -72,8 +73,9 @@ class InputField extends StatelessWidget {
                   Provider.of<LoginData>(context, listen: false).login(value, hintText);
                 } else if(form == FormIdentifier.addition){
                   Provider.of<AdditionData>(context, listen: false).add(value, hintText);
+                } else if(form==FormIdentifier.updation){
+                  Provider.of<UpdationData>(context, listen: false).update(value, hintText);
                 }
-                //text = value;
               },
               style: Palette.loginTextStyle.copyWith(color: textColor ?? Colors.white),
               obscureText: isObscure ?? false,

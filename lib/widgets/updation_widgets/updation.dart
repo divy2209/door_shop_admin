@@ -22,6 +22,9 @@ class Updation extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: Colors.black, //change your color here
+          ),
           backgroundColor: Colors.transparent,
           elevation: 0,
           title: Text('Door Shop Admin', style: TextStyle(color: Palette.primaryColor),),
@@ -50,27 +53,7 @@ class Updation extends StatelessWidget {
                   },
                 ),
                 SizedBox(height: size.height * 0.08,),
-                FutureBuilder(
-                  future: Future.delayed(Duration(milliseconds: 950)),
-                  builder: (c,s) => s.connectionState==ConnectionState.done
-                    ? Column(
-                    children: [
-                      UpdationForm(),
-                      SizedBox(height: 40),
-                      Consumer<UpdationData>(
-                        builder: (context, button, child){
-                          return UpdateButton();
-                        },
-                      ),
-                      SizedBox(height: 25,)
-                    ],
-                  )
-                      : Container(
-                    height: 495,
-                    color: Colors.transparent,
-                  )
-                ),
-                /*Column(
+                Column(
                   children: [
                     UpdationForm(),
                     SizedBox(height: 40),
@@ -81,7 +64,7 @@ class Updation extends StatelessWidget {
                     ),
                     SizedBox(height: 25,)
                   ],
-                ),*/
+                ),
               ],
             ),
           ),

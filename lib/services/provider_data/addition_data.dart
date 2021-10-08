@@ -71,6 +71,17 @@ class AdditionData extends ChangeNotifier{
     notifyListeners();
   }
 
+  List<String> generateSearchList(String name){
+    int n = name.length;
+    List<String> searchList = [];
+    for(int i = 1; i<=n; i++){
+      String str = name.substring(0,i);
+      searchList.add(str);
+    }
+
+    return searchList;
+  }
+
   @override
   void dispose() {
     // TODO: implement dispose

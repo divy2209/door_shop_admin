@@ -40,7 +40,8 @@ class UpdateButton extends StatelessWidget {
             else url = updation.url;
 
             if(url!=null){
-              await CropDatabase().addupdateCropData(identifier: identifier, name: cropName, price: price, quantity: quantity, perUnit: unit, discount: discount, url: url);
+              List<String> searchList = UpdationData().generateSearchList(cropName);
+              await CropDatabase().addupdateCropData(identifier: identifier, name: cropName, price: price, quantity: quantity, perUnit: unit, discount: discount, url: url, searchList: searchList);
               showError = '$identifier updated in the database';
               updation.imageFile = null;
               Navigator.pop(context);

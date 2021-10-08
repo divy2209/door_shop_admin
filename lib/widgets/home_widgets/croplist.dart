@@ -14,14 +14,14 @@ class CropList extends StatelessWidget {
     final crops = Provider.of<List<Crop>>(context);
     final updation = Provider.of<UpdationData>(context, listen: false);
 
-    return crops==null ? Center(child: CircularProgressIndicator()) : ListView.separated(
+    return crops==null ? Center(child: CircularProgressIndicator()) : ListView.builder(
       itemCount: crops.length,
       itemBuilder: (context, index){
         final Crop crop = crops[index];
         return Card(
           elevation: 5,
           color: Colors.white,
-          margin: EdgeInsets.all(20),
+          margin: EdgeInsets.all(15),
           child: Container(
             height: 110,
             margin: EdgeInsets.only(left: 10),
@@ -107,9 +107,7 @@ class CropList extends StatelessWidget {
             ),
           ),
         );
-      }, separatorBuilder: (BuildContext context, int index) {
-      return Divider(height: 10, color: Colors.transparent,);
-    },
+      },
     );
   }
 }

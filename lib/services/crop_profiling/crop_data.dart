@@ -11,7 +11,7 @@ class CropDatabase {
   final CollectionReference crop = FirebaseFirestore.instance.collection('crops');
   dynamic rupee = FontAwesomeIcons.rupeeSign;
 
-  Future addupdateCropData({String identifier, String name, int price, String perUnit, int quantity, int discount, String url}) async {
+  Future addupdateCropData({String identifier, String name, int price, String perUnit, int quantity, int discount, String url, List<String> searchList}) async {
     return await crop.doc(identifier).set({
       'crop uid': identifier,
       'crop name': name,
@@ -19,7 +19,8 @@ class CropDatabase {
       'quantity': quantity,
       'pricing and quantity unit': perUnit,
       'discount': discount,
-      'image url': url
+      'image url': url,
+      'search list': searchList
     });
   }
 
@@ -34,13 +35,13 @@ class CropDatabase {
   List<Crop> _cropsDataList(QuerySnapshot snap){
     return snap.docs.map((doc){
       return Crop(
-          identifier: doc.get('crop uid'),
-          name: doc.get('crop name'),
-          price: doc.get('price $rupee'),
-          quantity: doc.get('quantity'),
-          unit: doc.get('pricing and quantity unit'),
-          discount: doc.get('discount'),
-          url: doc.get('image url')
+        identifier: doc.get('crop uid'),
+        name: doc.get('crop name'),
+        price: doc.get('price $rupee'),
+        quantity: doc.get('quantity'),
+        unit: doc.get('pricing and quantity unit'),
+        discount: doc.get('discount'),
+        url: doc.get('image url'),
       );
     }).toList();
   }
