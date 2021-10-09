@@ -7,6 +7,7 @@ import 'package:door_shop_admin/services/utility.dart';
 import 'package:door_shop_admin/widgets/home_widgets/croplist.dart';
 import 'package:door_shop_admin/widgets/loading.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -20,12 +21,12 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<List<Crop>>.value(
-      value: CropDatabase().cropsData,
-      initialData: null,
-      child: Consumer<HomeData>(
-        builder: (context, home, child){
-          return home.pageloading ? Loading() : GestureDetector(
+    return Consumer<HomeData>(
+      builder: (context, home, child){
+        return StreamProvider<List<Crop>>.value(
+          value: CropDatabase(search: home.name).cropsData,
+          initialData: null,
+          child: home.pageloading ? Loading() : GestureDetector(
             onTap: () {
               FocusScopeNode currentFocus = FocusScope.of(context);
               if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
@@ -34,7 +35,7 @@ class Home extends StatelessWidget {
             },
             child: Scaffold(
               appBar: AppBar(
-                backgroundColor: Colors.transparent,
+                backgroundColor: Colors.white,
                 elevation: 0,
                 title: Text('Door Shop Admin', style: TextStyle(color: Palette.primaryColor),),
                 centerTitle: true,
@@ -58,7 +59,7 @@ class Home extends StatelessWidget {
                         ),
                       ),
                       PopupMenuItem<int>(
-                        value: 0,
+                        value: 1,
                         child: Row(
                           children: [
                             Icon(
@@ -87,36 +88,65 @@ class Home extends StatelessWidget {
                   ),
                 ],
               ),
-              body: Stack(
-                children: [
-                  CropList(),
-                  Positioned(
-                    right: 60,
-                    bottom: 60,
-                    child: GestureDetector(
-                      onTap: (){
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => AddCropScreen())
-                        );
-                      },
-                      child: Container(
-                        height: 80,
-                        width: 80,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[300].withOpacity(0.5),
-                          borderRadius: BorderRadius.all(Radius.circular(50))
+              body: Scaffold(
+                appBar: AppBar(
+                  centerTitle: true,
+                  backgroundColor: Colors.white,
+                  title: Container(
+                    height: 45,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Palette.primaryColor),
+                      borderRadius: BorderRadius.circular(10)
+                    ),
+                    child: Center(
+                      child: TextField(
+                        textInputAction: TextInputAction.done,
+                        keyboardType: TextInputType.text,
+                        inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r"[a-zA-Z]+|\s"))],
+                        cursorColor: Palette.primaryColor,
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            prefixIcon: Icon(Icons.search, color: Palette.primaryColor,),
+                            hintText: "Search..."
                         ),
-                        child: Icon(FontAwesomeIcons.plus, color: Palette.primaryColor, size: 25,),
+                        onChanged: (value){
+                          home.search(value);
+                        },
                       ),
                     ),
                   ),
-                ],
+                ),
+                body: Stack(
+                  children: [
+                    CropList(),
+                    Positioned(
+                      right: 40,
+                      bottom: 60,
+                      child: GestureDetector(
+                        onTap: (){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => AddCropScreen())
+                          );
+                        },
+                        child: Container(
+                          height: 80,
+                          width: 80,
+                          decoration: BoxDecoration(
+                              color: Colors.grey[300].withOpacity(0.5),
+                              borderRadius: BorderRadius.all(Radius.circular(50))
+                          ),
+                          child: Icon(FontAwesomeIcons.plus, color: Palette.primaryColor, size: 25,),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               )
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

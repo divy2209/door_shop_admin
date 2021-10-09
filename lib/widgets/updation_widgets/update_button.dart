@@ -30,6 +30,7 @@ class UpdateButton extends StatelessWidget {
           quantity = updation.quantity;
           unit = updation.unit;
           discount = updation.discount;
+          if(discount==null) discount = 0;
 
           if(identifier != null && cropName != null && price != null && quantity != null && unit != null && discount != null){
 

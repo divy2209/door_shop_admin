@@ -78,8 +78,9 @@ class UpdationData extends ChangeNotifier{
 
   List<String> generateSearchList(String name){
     int n = name.length;
+    name = name.toLowerCase();
     List<String> searchList = [];
-    for(int i = 1; i<=n; i++){
+    for(int i = 0; i<=n; i++){
       String str = name.substring(0,i);
       searchList.add(str);
     }

@@ -14,7 +14,7 @@ class CropList extends StatelessWidget {
     final crops = Provider.of<List<Crop>>(context);
     final updation = Provider.of<UpdationData>(context, listen: false);
 
-    return crops==null ? Center(child: CircularProgressIndicator()) : ListView.builder(
+    return crops==null ? Center(child: CircularProgressIndicator()) : (crops.length==0 ? Center(child: Text("No veggies match!", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),)) : ListView.builder(
       itemCount: crops.length,
       itemBuilder: (context, index){
         final Crop crop = crops[index];
@@ -40,7 +40,6 @@ class CropList extends StatelessWidget {
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
-                //crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Center(
                     child: Hero(
@@ -81,8 +80,7 @@ class CropList extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(crop.name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
-                            Text(crop.identifier, style: TextStyle(fontSize: 14),),
+                            Text(crop.name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),overflow: TextOverflow.ellipsis),
                           ],
                         ),
                       ),
@@ -108,6 +106,6 @@ class CropList extends StatelessWidget {
           ),
         );
       },
-    );
+    ));
   }
 }

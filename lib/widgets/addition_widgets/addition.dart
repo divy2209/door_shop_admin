@@ -26,6 +26,9 @@ class Addition extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: Colors.black, //change your color here
+          ),
           backgroundColor: Colors.transparent,
           elevation: 0,
           title: Text('Door Shop Admin', style: TextStyle(color: Palette.primaryColor),),

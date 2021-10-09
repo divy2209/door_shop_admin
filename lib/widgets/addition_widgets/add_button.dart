@@ -29,6 +29,7 @@ class AddButton extends StatelessWidget {
           quantity = addition.quantity;
           unit = addition.unit;
           discount = addition.discount;
+          if(discount==null) discount = 0;
 
           if(identifier != null && cropName != null && price != null && quantity != null && unit != null && discount != null){
 
