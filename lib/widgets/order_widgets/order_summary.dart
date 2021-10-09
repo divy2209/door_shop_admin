@@ -111,7 +111,7 @@ class OrderSummary extends StatelessWidget {
             SizedBox(height: 30,),
             Container(
               width: size.width*0.92,
-              height: 55*order.crops.length>290 ? 290 : (60*order.crops.length).toDouble(),
+              height: 55*order.crops.length>290 ? 290 : (55*order.crops.length).toDouble(),
               child: Scrollbar(
                 thickness: 4,
                 controller: _scrollController,
